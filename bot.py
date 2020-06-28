@@ -1,13 +1,14 @@
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 from storage import dropbox_folder_from, save_on_dropbox
-
+import pprint
 
 app = Flask(__name__)
 
 
 @app.route('/reply', methods=['POST'])
 def reply():
+    pprint.pprint(request.values)
     num_media = int(request.values['NumMedia'])
     media = request.values.get('MediaContentType0', '')
     user_phone_number = request.values['From']
@@ -39,3 +40,6 @@ def reply():
             reply = f'Here you go: {all_pics_url}'
     resp.message(reply)
     return str(resp)
+
+if __name__ == '__main__':
+    app.run()
