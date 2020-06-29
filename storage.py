@@ -1,5 +1,6 @@
 import dropbox
 import os
+import traceback
 
 
 token = os.getenv('DROPBOX_TOKEN')
@@ -25,4 +26,6 @@ def dropbox_folder_from(phone_number):
         if exception.error.is_shared_link_already_exists():
             link = dbx.sharing_get_shared_links(path)
             folder_url = link.links[0].url
+    except:
+        traceback.print_exc()
     return folder_url

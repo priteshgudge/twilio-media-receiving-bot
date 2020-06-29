@@ -8,6 +8,7 @@ app = Flask(__name__)
 
 @app.route('/reply', methods=['POST'])
 def reply():
+    print("Received Message")
     pprint.pprint(request.values)
     num_media = int(request.values['NumMedia'])
     media = request.values.get('MediaContentType0', '')
@@ -18,7 +19,7 @@ def reply():
         user_phone_number = user_phone_number.split(':')[1]
 
     resp = MessagingResponse()
-    reply = f"I didn't get it 😕"  # default message
+    reply = f"I didn't get it 😕 Send pics to me to save them. To see your pics, just send me a message with the word *see*."  # default message
 
     if num_media > 0:
         if media.startswith('image/'):
@@ -37,9 +38,16 @@ def reply():
                 )
         elif 'see' in user_message:
             all_pics_url = dropbox_folder_from(user_phone_number)
+            # all_pics_url = "URL"
             reply = f'Here you go: {all_pics_url}'
     resp.message(reply)
     return str(resp)
+
+# @app.route('/status', methods=['POST'])
+# def status():
+#     print("Received Status")
+#     #pprint(request.values)
+
 
 if __name__ == '__main__':
     app.run()
